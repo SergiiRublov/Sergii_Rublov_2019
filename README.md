@@ -28,6 +28,56 @@ time_t get_time(char *date)                            // funkciu pre prevod ret
 	return t1;                                       // vrati hodnotu t1
 }
 
+int v (char *meno, char *SPZ, int *typ, double *cena, char *datum, FILE *fv)   //po aktivovani program otvori subor a vypise jednotlive zaznamy zo suboru na obrazovku.
+{
+	fv = fopen("autobazar.txt", "r");                // otvorte textovy subor na citanie
+	if (fv != NULL)                                  // subor nie je 0
+	{
+		int i = 0;
+		char c;
+		for (; ; i++)
+		{
+			int j = i * 50;
+			while((c = fgetc(fv)) != '\n')                    // funkcie na citanie suborov znak po znaku a na koniec riadku
+			{
+				if (c != EOF)
+					meno[j++] = c;                            // zapisovanie precitaneho znaku do pola Meno s prechodom na dalsi prvok pola
+				else
+					return i;
+			}
+			meno[j] = '\0';                                   // napiste na meno riadku na koniec aktualneho mena 
+				
+			j = i * 8;                                        // nastavenie posunu v poli SPZ pre aktualny prvok
+			while((SPZ[j++] = fgetc(fv)) != '\n');            // citanie SPZ z pamate
+			SPZ[--j] = '\0';
+				
+			j = 0;
+			char typeChar[2];
+			while((typeChar[j++] = fgetc(fv)) != '\n');       // citanie z pamate - auta 0 alebo 1
+			typ[i] = atoi(typeChar);                          // previest subor z char na int
+				
+			j = 0;
+			char cenaChar[10];
+			while((cenaChar[j++] = fgetc(fv)) != '\n');       // nacitanie ceny automobilu z pamate
+			cena[i] = atof(cenaChar);                         // previest subor z char na int
+				
+			j = i * 9;
+			while((datum[j++] = fgetc(fv)) != '\n');         // citanie datumu
+			datum[--j] = '\0';
+						
+			if (fgetc(fv) == EOF)                            // po dokonceni citania je subor ukonceny
+				break;
+		}
+		
+		fclose(fv);                                          // zatvorte textovy subor
+		return i+1;
+	}
+	else
+		printf("Neotvoreny subor\n");                         // zobrazit informacie, ak subor nie je otvoreny
+	return 0;
+}
+
+
 int main (void)
 {
 	char meno[500], SPZ[80], datum[90];
