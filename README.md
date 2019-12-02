@@ -1,8 +1,32 @@
 # Sergii_Rublov_2019
 Code in  "C" for PrPr
-Projekt č. 1
-Práca s jednorozmerným poľom
-Programa, ktora bude pracovať so záznamami zapísanými v súbore autobazar.txt obsahujúci záznamy o predaji áut. Program bude vykonávať príkazy načítané zo štandardného vstupu.
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
+time_t get_time(char *date)                            // funkciu pre prevod retazca s datumom do formatu time_t, zapiste do pamate hodnotu „rrrr“ - vypiste rok z formatu „rrrrymdd“
+{
+	struct tm t;
+	char substr1[5], substr2[3], substr3[3];           
+	strncpy(substr1, date, 4);
+	substr1 [4] = '\0';                               // zapiste hodnotu „rrrr“ do pamate
+	strncpy(substr2, date+4, 2);
+	substr2 [2] = '\0';                               // zapiste hodnotu „mm“ do pamate
+	strncpy(substr3, date+6, 2);
+	substr3 [2] = '\0';                               // zapiste hodnotu „dd“ do pamate
+	t.tm_year = atoi(substr1) - 1900;                 
+	t.tm_mon = atoi(substr2) - 1;                     
+	t.tm_mday = atoi(substr3);                        
+	t.tm_hour = 0;
+    t.tm_min = 0;
+    t.tm_sec = 1;
+    t.tm_isdst = -1;
+	time_t t1 = mktime(&t);                          // skonvertujte format „rrrrmdd“ na „rrrr mm dd“
+	return t1;                                       // vrati hodnotu t1
+}
 
 int main (void)
 {
